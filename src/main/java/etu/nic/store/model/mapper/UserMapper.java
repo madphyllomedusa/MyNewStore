@@ -42,7 +42,5 @@ public class UserMapper {
         user.setCreatedAt(userDto.getCreatedAt());
         user.setBlockedAt(userDto.getBlockedAt());
         return user;
-
     }
-
 }
