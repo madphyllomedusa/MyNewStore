@@ -66,7 +66,7 @@ public class AuthServiceImpl implements AuthService {
         user.setRole(Role.ROLE_USER);
         User savedUser = userRepository.save(user);
         String token = jwtService.generateToken(savedUser.getEmail(), savedUser.getRole().toString());
-        logger.info("User successfully registered at {}", savedUser.getCreatedAt());
+        logger.info("User successfully registered at {}", savedUser.getCreatedTime());
         return new JwtAuthenticationResponse(token);
     }
 

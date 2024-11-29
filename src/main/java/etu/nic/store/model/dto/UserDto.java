@@ -28,9 +28,9 @@ public class UserDto {
     @NotNull
     private Role role;
 
-    private OffsetDateTime createdAt;
+    private OffsetDateTime createdTime;
 
-    private OffsetDateTime blockedAt;
+    private OffsetDateTime blockedTime;
 
     @Override
     public String toString() {

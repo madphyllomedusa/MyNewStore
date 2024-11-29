@@ -41,9 +41,9 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
-    private OffsetDateTime createdAt;
+    private OffsetDateTime createdTime;
 
-    private OffsetDateTime blockedAt;
+    private OffsetDateTime blockedTime;
 
     @Override
     public String toString() {

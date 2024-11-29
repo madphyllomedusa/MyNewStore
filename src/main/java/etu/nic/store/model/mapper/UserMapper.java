@@ -16,8 +16,8 @@ public class UserMapper {
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail().toLowerCase());
         userDto.setRole(user.getRole());
-        userDto.setCreatedAt(user.getCreatedAt());
-        userDto.setCreatedAt(user.getBlockedAt());
+        userDto.setCreatedTime(user.getCreatedTime());
+        userDto.setCreatedTime(user.getBlockedTime());
         return userDto;
     }
 
@@ -27,8 +27,8 @@ public class UserMapper {
         user.setLastName(signUpRequest.getLastName());
         user.setEmail(signUpRequest.getEmail().toLowerCase());
         user.setPassword(signUpRequest.getPassword().getBytes());
-        user.setCreatedAt(OffsetDateTime.now());
-        user.setBlockedAt(null);
+        user.setCreatedTime(OffsetDateTime.now());
+        user.setBlockedTime(null);
         return user;
     }
 
@@ -39,8 +39,8 @@ public class UserMapper {
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail().toLowerCase());
         user.setRole(userDto.getRole());
-        user.setCreatedAt(userDto.getCreatedAt());
-        user.setBlockedAt(userDto.getBlockedAt());
+        user.setCreatedTime(userDto.getCreatedTime());
+        user.setBlockedTime(userDto.getBlockedTime());
         return user;
     }
 }
