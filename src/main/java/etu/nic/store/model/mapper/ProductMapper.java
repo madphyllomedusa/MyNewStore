@@ -4,6 +4,7 @@ import etu.nic.store.model.dto.ProductDto;
 import etu.nic.store.model.entity.Category;
 import etu.nic.store.model.entity.Parameter;
 import etu.nic.store.model.entity.Product;
+import etu.nic.store.model.entity.ProductImage;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -43,6 +44,17 @@ public class ProductMapper {
             product.setParameters(parameters);
         }
 
+        if (productDto.getImageUrls() != null) {
+            Set<ProductImage> images = productDto.getImageUrls().stream()
+                    .map(imageUrl -> {
+                        ProductImage productImage = new ProductImage();
+                        productImage.setImageUrl(imageUrl);
+                        productImage.setProduct(product);
+                        return productImage;
+                    }).collect(Collectors.toSet());
+            product.setImages(images);
+        }
+
         return product;
     }
 
@@ -67,6 +79,13 @@ public class ProductMapper {
         if (product.getParameters() != null) {
             productDto.setParameters(product.getParameters().stream()
                     .collect(Collectors.toMap(Parameter::getName, parameter -> "значение")));
+        }
+
+        if (product.getImages() != null) {
+            Set<String> imageUrls = product.getImages().stream()
+                    .map(ProductImage::getImageUrl)
+                    .collect(Collectors.toSet());
+            productDto.setImageUrls(imageUrls);
         }
 
         return productDto;

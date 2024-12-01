@@ -32,9 +32,9 @@ CREATE TABLE IF NOT EXISTS products (
 );
 
 CREATE TABLE IF NOT EXISTS product_images (
+    id              BIGSERIAL PRIMARY KEY,
     product_id      BIGINT NOT NULL,
     image_url       TEXT NOT NULL,
-    PRIMARY KEY (product_id),
     FOREIGN KEY (product_id) REFERENCES products(id)
 );
 
