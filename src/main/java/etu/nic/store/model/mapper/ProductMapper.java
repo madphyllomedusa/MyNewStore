@@ -18,6 +18,7 @@ public class ProductMapper {
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
+        product.setQuantity(productDto.getQuantity());
         product.setCreatedTime(productDto.getCreatedTime());
         product.setUpdatedTime(productDto.getUpdatedTime());
         product.setDeletedTime(productDto.getDeletedTime());
@@ -51,6 +52,8 @@ public class ProductMapper {
         productDto.setName(product.getName());
         productDto.setDescription(product.getDescription());
         productDto.setPrice(product.getPrice());
+        productDto.setQuantity(product.getQuantity());
+        productDto.setAvailabilityStatus(product.getAvailabilityStatus());
         productDto.setCreatedTime(product.getCreatedTime());
         productDto.setUpdatedTime(product.getUpdatedTime());
         productDto.setDeletedTime(product.getDeletedTime());

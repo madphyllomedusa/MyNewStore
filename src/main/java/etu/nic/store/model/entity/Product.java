@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.HashSet;
@@ -40,6 +41,11 @@ public class Product {
     @Column(nullable = false)
     private BigDecimal price;
 
+    private Integer quantity;
+
+    @Transient
+    private String availabilityStatus;
+
     private OffsetDateTime createdTime;
 
     private OffsetDateTime updatedTime;
@@ -62,5 +68,5 @@ public class Product {
     )
     private Set<Parameter> parameters = new HashSet<>();
 
-
+    // todo добавить изображения и кол-во товаров
 }

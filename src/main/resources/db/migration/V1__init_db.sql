@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS users (
 
 CREATE TABLE IF NOT EXISTS categories (
     id              BIGSERIAL PRIMARY KEY,
-    name           TEXT NOT NULL,
+    name            TEXT NOT NULL,
     description     TEXT,
     parent_id       BIGINT,
     created_time    TIMESTAMP WITH TIME ZONE,
@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS products (
     name            TEXT NOT NULL,
     description     TEXT,
     price           DECIMAL NOT NULL,
+    quantity        INTEGER,
     created_time    TIMESTAMP WITH TIME ZONE,
     updated_time    TIMESTAMP WITH TIME ZONE,
     deleted_time    TIMESTAMP WITH TIME ZONE

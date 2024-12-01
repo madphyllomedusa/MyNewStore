@@ -7,12 +7,14 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.time.OffsetDateTime;
 
 
 @Data
 @NoArgsConstructor
 public class UserDto {
+    @PositiveOrZero(message = "id не может быть меньше нуля")
     private Long id;
 
     @NotBlank(message = "Имя пользователя не должно быть пустым")
