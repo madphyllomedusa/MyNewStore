@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -46,8 +48,10 @@ public class Product {
     @Transient
     private String availabilityStatus;
 
+    @CreationTimestamp
     private OffsetDateTime createdTime;
 
+    @UpdateTimestamp
     private OffsetDateTime updatedTime;
 
     private OffsetDateTime deletedTime;

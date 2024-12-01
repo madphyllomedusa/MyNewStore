@@ -4,6 +4,7 @@ import etu.nic.store.model.enums.Role;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -41,6 +42,7 @@ public class User {
     @Column(nullable = false)
     private Role role;
 
+    @CreationTimestamp
     private OffsetDateTime createdTime;
 
     private OffsetDateTime blockedTime;

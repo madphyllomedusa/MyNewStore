@@ -3,6 +3,8 @@ package etu.nic.store.model.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -42,8 +44,10 @@ public class Category {
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     private Set<Product> products = new HashSet<>();
 
+    @CreationTimestamp
     private OffsetDateTime createdTime;
 
+    @UpdateTimestamp
     private OffsetDateTime updatedTime;
 
     private OffsetDateTime deletedTime;
