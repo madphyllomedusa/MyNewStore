@@ -30,8 +30,7 @@ public class ProductDto {
     @PositiveOrZero(message = "Количество не может быть меньше нуля")
     private Integer quantity;
 
-    @NotNull
-    private String availabilityStatus;
+    private String quantityStatus;
 
     @NotEmpty(message = "Продукт должен быть привязан к категории")
     private Set<Long> categoryIds;

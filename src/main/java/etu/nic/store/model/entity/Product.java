@@ -22,9 +22,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -50,7 +48,15 @@ public class Product {
     private Integer quantity;
 
     @Transient
-    private String availabilityStatus;
+    public String getQuantityStatus() {
+        if (quantity == null || quantity == 0) {
+            return "Нет в наличии";
+        } else if (quantity <= 5) {
+            return "Мало";
+        } else {
+            return "В наличии";
+        }
+    }
 
     @CreationTimestamp
     private OffsetDateTime createdTime;
@@ -68,7 +74,7 @@ public class Product {
     )
     private Set<Category> categories = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(
             name = "product_parameter",
             joinColumns = @JoinColumn(name = "product_id"),
@@ -79,5 +85,4 @@ public class Product {
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<ProductImage> images = new HashSet<>();
 
-    // todo добавить изображения и кол-во товаров
 }

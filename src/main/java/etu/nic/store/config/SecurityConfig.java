@@ -30,6 +30,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers("/auth/**").permitAll()
+                        .antMatchers("/category/**").permitAll()
+                        .antMatchers("/product/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

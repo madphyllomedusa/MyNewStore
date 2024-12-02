@@ -15,15 +15,52 @@ public class ProductMapper {
 
     public Product toEntity(ProductDto productDto) {
         Product product = new Product();
-        product.setId(productDto.getId());
+        applyDtoToEntity(productDto, product);
+        return product;
+    }
+
+    public void updateEntity(ProductDto productDto, Product product) {
+        applyDtoToEntity(productDto, product);
+    }
+
+    public ProductDto toDto(Product product) {
+        ProductDto productDto = new ProductDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setDescription(product.getDescription());
+        productDto.setPrice(product.getPrice());
+        productDto.setQuantity(product.getQuantity());
+        productDto.setQuantityStatus(product.getQuantityStatus());
+        productDto.setCreatedTime(product.getCreatedTime());
+        productDto.setUpdatedTime(product.getUpdatedTime());
+        productDto.setDeletedTime(product.getDeletedTime());
+
+        if (product.getCategories() != null) {
+            Set<Long> categoryIds = product.getCategories().stream()
+                    .map(Category::getId).collect(Collectors.toSet());
+            productDto.setCategoryIds(categoryIds);
+        }
+
+        if (product.getParameters() != null) {
+            productDto.setParameters(product.getParameters().stream()
+                    .collect(Collectors.toMap(Parameter::getName, Parameter::getValue)));
+        }
+
+        if (product.getImages() != null) {
+            Set<String> imageUrls = product.getImages().stream()
+                    .map(ProductImage::getImageUrl)
+                    .collect(Collectors.toSet());
+            productDto.setImageUrls(imageUrls);
+        }
+
+        return productDto;
+    }
+
+    private void applyDtoToEntity(ProductDto productDto, Product product) {
         product.setName(productDto.getName());
         product.setDescription(productDto.getDescription());
         product.setPrice(productDto.getPrice());
         product.setQuantity(productDto.getQuantity());
-        product.setCreatedTime(productDto.getCreatedTime());
-        product.setUpdatedTime(productDto.getUpdatedTime());
-        product.setDeletedTime(productDto.getDeletedTime());
-
         if (productDto.getCategoryIds() != null) {
             Set<Category> categories = productDto.getCategoryIds().stream()
                     .map(categoryId -> {
@@ -35,10 +72,11 @@ public class ProductMapper {
         }
 
         if (productDto.getParameters() != null) {
-            Set<Parameter> parameters = productDto.getParameters().keySet().stream()
-                    .map(s -> {
+            Set<Parameter> parameters = productDto.getParameters().entrySet().stream()
+                    .map(entry -> {
                         Parameter parameter = new Parameter();
-                        parameter.setName(s);
+                        parameter.setName(entry.getKey());
+                        parameter.setValue(entry.getValue());
                         return parameter;
                     }).collect(Collectors.toSet());
             product.setParameters(parameters);
@@ -54,40 +92,6 @@ public class ProductMapper {
                     }).collect(Collectors.toSet());
             product.setImages(images);
         }
-
-        return product;
-    }
-
-    public ProductDto toDto(Product product) {
-        ProductDto productDto = new ProductDto();
-        productDto.setId(product.getId());
-        productDto.setName(product.getName());
-        productDto.setDescription(product.getDescription());
-        productDto.setPrice(product.getPrice());
-        productDto.setQuantity(product.getQuantity());
-        productDto.setAvailabilityStatus(product.getAvailabilityStatus());
-        productDto.setCreatedTime(product.getCreatedTime());
-        productDto.setUpdatedTime(product.getUpdatedTime());
-        productDto.setDeletedTime(product.getDeletedTime());
-
-        if (product.getCategories() != null) {
-            Set<Long> categoryIds = product.getCategories().stream()
-                    .map(Category::getId).collect(Collectors.toSet());
-            productDto.setCategoryIds(categoryIds);
-        }
-
-        if (product.getParameters() != null) {
-            productDto.setParameters(product.getParameters().stream()
-                    .collect(Collectors.toMap(Parameter::getName, parameter -> "значение")));
-        }
-
-        if (product.getImages() != null) {
-            Set<String> imageUrls = product.getImages().stream()
-                    .map(ProductImage::getImageUrl)
-                    .collect(Collectors.toSet());
-            productDto.setImageUrls(imageUrls);
-        }
-
-        return productDto;
     }
 }
+

@@ -49,14 +49,15 @@ CREATE TABLE IF NOT EXISTS product_category (
 
 CREATE TABLE IF NOT EXISTS parameters (
     id              BIGSERIAL PRIMARY KEY,
-    name            TEXT NOT NULL
+    name            TEXT NOT NULL,
+    value           TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS product_parameter (
     product_id      BIGINT NOT NULL,
     parameter_id    BIGINT NOT NULL,
-    parameter_value TEXT NOT NULL,
     PRIMARY KEY (product_id, parameter_id),
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
     FOREIGN KEY (parameter_id) REFERENCES parameters(id) ON DELETE CASCADE
 );
+

@@ -2,6 +2,8 @@ package etu.nic.store.model.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
@@ -15,8 +17,9 @@ public class CategoryDto {
     private String description;
     private Long parentId;
 
+    @CreationTimestamp
     private OffsetDateTime createdTime;
-
+    @UpdateTimestamp
     private OffsetDateTime updatedTime;
 
     private OffsetDateTime deletedTime;
