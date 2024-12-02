@@ -27,6 +27,6 @@ jwt:
   expiration: 24h
 
 cloudinary:
-  cloud_name: "dwzjwh6tb"
-  api_key: "429168221755551"
-  api_secret: "zRvcEGNZ5ZgnEFDf05_7DL4pcSo"
+  cloud_name: dwzjwh6tb
+  api_key: 833194861614884
+  api_secret: xOCkPprkt4GiYyDtNnG4NI73vMU

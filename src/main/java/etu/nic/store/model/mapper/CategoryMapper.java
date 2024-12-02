@@ -8,6 +8,15 @@ import org.springframework.stereotype.Component;
 public class CategoryMapper {
     public Category toEntity(CategoryDto categoryDto) {
         Category category = new Category();
+        applyDtoToEntity(categoryDto, category);
+        return category;
+    }
+
+    public void updateEntity(CategoryDto categoryDto, Category category) {
+        applyDtoToEntity(categoryDto, category);
+    }
+
+    private void applyDtoToEntity(CategoryDto categoryDto, Category category) {
         category.setId(categoryDto.getId());
         category.setName(categoryDto.getName());
         if (categoryDto.getParentId() != null) {
@@ -19,7 +28,6 @@ public class CategoryMapper {
         category.setCreatedTime(categoryDto.getCreatedTime());
         category.setUpdatedTime(categoryDto.getUpdatedTime());
         category.setDeletedTime(categoryDto.getDeletedTime());
-        return category;
     }
 
     public CategoryDto toDto(Category category) {

@@ -21,8 +21,8 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<List<CategoryDto>> addCategories(@Valid @RequestBody List<CategoryDto> categoryDtos) {
-        List<CategoryDto> categories = categoryDtos.stream()
+    public ResponseEntity<List<CategoryDto>> addCategories(@Valid @RequestBody List<CategoryDto> categoryDto) {
+        List<CategoryDto> categories = categoryDto.stream()
                 .map(categoryService::addCategory)
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.CREATED).body(categories);
