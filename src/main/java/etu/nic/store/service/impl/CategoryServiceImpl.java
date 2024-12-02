@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -24,6 +25,7 @@ public class CategoryServiceImpl implements CategoryService {
     private final CategoryMapper categoryMapper;
 
     @Override
+    @Transactional
     public CategoryDto addCategory(CategoryDto categoryDto) {
         logger.info("Trying to add category {}", categoryDto);
         validateCategory(categoryDto);
@@ -32,6 +34,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
         logger.info("Trying to update category with id {}", id);
         validateCategory(categoryDto);

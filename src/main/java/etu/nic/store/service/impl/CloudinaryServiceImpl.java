@@ -23,9 +23,14 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     @Override
     public String upload(MultipartFile file) {
         try {
+            if (file.isEmpty()) {
+                logger.error("File is empty");
+                throw new BadRequestException("Файл отсутствует");
+            }
             logger.info("Trying to upload image to Cloudinary {}", file.getOriginalFilename());
             Map uploadResult = cloudinary.uploader()
                     .upload(file.getBytes(), ObjectUtils.emptyMap());
+            logger.info("Image uploaded successfully {}", uploadResult.get("url"));
             return (String) uploadResult.get("url");
         } catch (IOException e) {
             throw new BadRequestException("Failed to upload file to Cloudinary" + e);

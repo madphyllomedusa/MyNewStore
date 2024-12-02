@@ -45,7 +45,6 @@ public class ProductServiceImpl implements ProductService {
         productMapper.updateEntity(productDto, product);
         productRepository.save(product);
         logger.info("Успешно обновлен продукт с ID {}", id);
-
         return productMapper.toDto(product);
     }
 
