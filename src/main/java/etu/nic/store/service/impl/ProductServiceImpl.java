@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.OffsetDateTime;
 
 
 @Service
@@ -53,7 +54,8 @@ public class ProductServiceImpl implements ProductService {
     public ProductDto deleteProductById(Long id) {
         logger.info("Trying to delete product with ID {}", id);
         Product product = findProductById(id);
-        productRepository.delete(product);
+        product.setDeletedTime(OffsetDateTime.now());
+        productRepository.save(product);
         logger.info("Successfully deleted product with ID {}", id);
         return productMapper.toDto(product);
     }

@@ -1,6 +1,7 @@
 package etu.nic.store.service.impl;
 
 import etu.nic.store.exceptionhandler.BadRequestException;
+import etu.nic.store.exceptionhandler.NotFoundException;
 import etu.nic.store.model.dto.CategoryDto;
 import etu.nic.store.model.entity.Category;
 import etu.nic.store.model.mapper.CategoryMapper;
@@ -10,6 +11,10 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +31,36 @@ public class CategoryServiceImpl implements CategoryService {
         return categoryMapper.toDto(category);
     }
 
+    @Override
+    public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
+        logger.info("Trying to update category with id {}", id);
+        validateCategory(categoryDto);
+        Category category = findCategoryById(id);
+        categoryMapper.updateEntity(categoryDto, category);
+        categoryRepository.save(category);
+        logger.info("Successfully updated category with id {}", id);
+        return categoryMapper.toDto(category);
+    }
+
+    @Override
+    public void deleteCategory(Long id) {
+        logger.info("Trying to delete category with id {}", id);
+        Category category = findCategoryById(id);
+        category.setDeletedTime(OffsetDateTime.now());
+        categoryRepository.save(category);
+        logger.info("Successfully deleted category with id {}", id);
+    }
+
+    @Override
+    public List<CategoryDto> getCategoryChildren(Long id) {
+        logger.info("Trying to get category children with id {}", id);
+        Category category = findCategoryById(id);
+        List<Category> childCategories = categoryRepository.findByParent_Id(category.getId());
+        return childCategories.stream()
+                .map(categoryMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
     private void validateCategory(CategoryDto categoryDto) {
         if (categoryDto == null) {
             logger.error("Category DTO is null");
@@ -35,5 +70,10 @@ public class CategoryServiceImpl implements CategoryService {
             logger.error("Category name is null or empty");
             throw new BadRequestException("Имя категории не заполнено");
         }
+    }
+
+    private Category findCategoryById(Long id) {
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Категория не найдена"));
     }
 }
