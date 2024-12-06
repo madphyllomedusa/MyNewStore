@@ -19,5 +19,4 @@ public interface CategoryRepository extends JpaRepository<Category, Long> {
             "SELECT * FROM subcategories",
             nativeQuery = true)
     List<Category> findAllSubcategories(@Param("categoryId") Long id);
-
 }
