@@ -64,6 +64,13 @@ public class CategoryServiceImpl implements CategoryService {
                 .collect(Collectors.toList());
     }
 
+    public List<Long> getCategoryAndSubcategoryIds(Long id) {
+        logger.info("Fetching category and subcategories for category {}", id);
+        return categoryRepository.findAllSubcategories(id).stream()
+                .map(Category::getId)
+                .collect(Collectors.toList());
+    }
+
     private void validateCategory(CategoryDto categoryDto) {
         if (categoryDto == null) {
             logger.error("Category DTO is null");

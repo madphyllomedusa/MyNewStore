@@ -14,4 +14,6 @@ public interface ProductService {
     ProductDto getProductById(Long id);
 
     Page<ProductDto> getProductsByCategoryId(Long categoryId, Pageable pageable);
+
+    Page<ProductDto> getProductsByCategoryAndSubcategories(Long categoryId, String sortBy, Pageable pageable);
 }

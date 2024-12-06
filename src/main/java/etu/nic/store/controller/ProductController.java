@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
@@ -33,7 +34,7 @@ public class ProductController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductDto> updateProduct(@PathVariable Long id, @Valid @RequestBody ProductDto productDto) {
         ProductDto product = productService.updateProduct(id, productDto);
-        return ResponseEntity.status(HttpStatus.OK).body(product);
+        return ResponseEntity.ok(product);
     }
 
     @DeleteMapping
@@ -45,12 +46,15 @@ public class ProductController {
     @GetMapping("/{id}")
     public ResponseEntity<ProductDto> getProductById(@PathVariable Long id) {
         ProductDto product = productService.getProductById(id);
-        return ResponseEntity.status(HttpStatus.OK).body(product);
+        return ResponseEntity.ok(product);
     }
 
     @GetMapping("/category/{categoryId}")
-    public ResponseEntity<Page<ProductDto>> getProductByCategoryId(@PathVariable Long categoryId, Pageable pageable) {
-        Page<ProductDto> products = productService.getProductsByCategoryId(categoryId, pageable);
-        return ResponseEntity.status(HttpStatus.OK).body(products);
+        public ResponseEntity<Page<ProductDto>> getProductsForCategory(
+            @PathVariable Long categoryId,
+            @RequestParam(defaultValue = "priceAsc") String sortBy,
+            Pageable pageable) {
+        Page<ProductDto> products = productService.getProductsByCategoryAndSubcategories(categoryId, sortBy, pageable);
+        return ResponseEntity.ok(products);
     }
 }

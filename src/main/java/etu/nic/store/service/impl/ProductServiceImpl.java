@@ -6,17 +6,21 @@ import etu.nic.store.model.dto.ProductDto;
 import etu.nic.store.model.entity.Product;
 import etu.nic.store.model.mapper.ProductMapper;
 import etu.nic.store.repository.ProductRepository;
+import etu.nic.store.repository.specification.ProductSpecifications;
+import etu.nic.store.service.CategoryService;
 import etu.nic.store.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 
 @Service
@@ -25,6 +29,7 @@ public class ProductServiceImpl implements ProductService {
     private static final Logger logger = LoggerFactory.getLogger(ProductServiceImpl.class);
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
+    private final CategoryService categoryService;
 
     @Override
     @Transactional
@@ -74,6 +79,21 @@ public class ProductServiceImpl implements ProductService {
             throw new BadRequestException("Неверный идентификатор категории");
         }
         Page<Product> products = productRepository.findByCategories_Id(categoryId, pageable);
+        return products.map(productMapper::toDto);
+    }
+
+    @Override
+    public Page<ProductDto> getProductsByCategoryAndSubcategories(Long categoryId, String sortBy, Pageable pageable) {
+        logger.info("Fetching products for category {} and its subcategories with sort {}", categoryId, sortBy);
+
+        List<Long> categoryIds = categoryService.getCategoryAndSubcategoryIds(categoryId);
+
+        Specification<Product> specification = Specification
+                .where(ProductSpecifications.belongsToCategories(categoryIds))
+                .and(ProductSpecifications.sortByPrice(sortBy));
+
+        Page<Product> products = productRepository.findAll(specification, pageable);
+
         return products.map(productMapper::toDto);
     }
 
