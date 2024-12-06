@@ -61,3 +61,17 @@ CREATE TABLE IF NOT EXISTS product_parameter (
     FOREIGN KEY (parameter_id) REFERENCES parameters(id) ON DELETE CASCADE
 );
 
+CREATE TABLE carts (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT REFERENCES users(id) ON DELETE SET NULL,
+    session_id TEXT UNIQUE,
+    CONSTRAINT unique_user_or_session UNIQUE (user_id, session_id)
+);
+
+CREATE TABLE cart_items (
+    id BIGSERIAL PRIMARY KEY,
+    cart_id BIGINT REFERENCES carts(id) ON DELETE CASCADE,
+    product_id BIGINT REFERENCES products(id) ON DELETE CASCADE,
+    quantity INTEGER NOT NULL CHECK (quantity > 0)
+);
+
