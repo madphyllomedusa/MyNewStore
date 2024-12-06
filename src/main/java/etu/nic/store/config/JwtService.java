@@ -42,6 +42,15 @@ public class JwtService {
                 .get("role", String.class);
     }
 
+    public Long extractUserId(String token) {
+        return Jwts.parser()
+                .setSigningKey(secret)
+                .parseClaimsJws(token)
+                .getBody()
+                .get("userId", Long.class); // Предполагается, что userId добавлен в токен
+    }
+
+
     public boolean validateToken(String token) {
         try {
             Jwts.parser()

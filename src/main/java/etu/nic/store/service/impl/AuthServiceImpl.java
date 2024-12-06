@@ -2,6 +2,7 @@ package etu.nic.store.service.impl;
 
 import etu.nic.store.config.JwtService;
 import etu.nic.store.exceptionhandler.BadRequestException;
+import etu.nic.store.exceptionhandler.NotFoundException;
 import etu.nic.store.model.dto.JwtAuthenticationResponse;
 import etu.nic.store.model.dto.SignInRequest;
 import etu.nic.store.model.dto.SignUpRequest;
@@ -31,7 +32,8 @@ public class AuthServiceImpl implements AuthService {
         String password = signInRequest.getPassword();
         logger.info("Attempting to login user");
 
-        User user = userRepository.findByEmail(email);
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(()-> new NotFoundException("Пользователь не найден"));
         if (user == null) {
             logger.error("User with email {} not found", email);
             throw new BadRequestException("Неверный адрес электронной почты");
@@ -71,9 +73,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void isEmailNotUnique(String email) {
-        if (userRepository.findByEmail(email) != null) {
+        if (userRepository.findByEmail(email).isPresent()) {
             logger.error("User with email {} already exists", email);
-            throw new BadRequestException("User with email " + email + " already exists");
+            throw new BadRequestException("Пользователь с таким email " + email + " уже зарегистрирован");
         }
     }
 }
