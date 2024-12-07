@@ -23,7 +23,7 @@ public class CloudinaryServiceImpl implements CloudinaryService {
     @Override
     public String upload(MultipartFile file) {
         try {
-            if (file.isEmpty()) {
+            if (file == null || file.isEmpty()) {
                 logger.error("File is empty");
                 throw new BadRequestException("Файл отсутствует");
             }

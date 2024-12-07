@@ -5,6 +5,7 @@ import etu.nic.store.service.CategoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,21 +25,31 @@ import java.util.stream.Collectors;
 public class CategoryController {
     private final CategoryService categoryService;
 
-    @PostMapping
-    public ResponseEntity<List<CategoryDto>> addCategories(@Valid @RequestBody List<CategoryDto> categoryDto) {
-        List<CategoryDto> categories = categoryDto.stream()
+    @PostMapping()
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<CategoryDto> addCategory(@RequestBody @Valid CategoryDto categoryDto) {
+        CategoryDto category = categoryService.addCategory(categoryDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(category);
+    }
+
+    @PostMapping("/bulk")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    public ResponseEntity<List<CategoryDto>> addCategories(@Valid @RequestBody List<CategoryDto> categoryDtos) {
+        List<CategoryDto> categories = categoryDtos.stream()
                 .map(categoryService::addCategory)
                 .collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.CREATED).body(categories);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<CategoryDto> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDto categoryDto) {
         CategoryDto category = categoryService.updateCategory(id, categoryDto);
         return ResponseEntity.status(HttpStatus.OK).body(category);
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<CategoryDto> deleteCategory(@PathVariable Long id) {
         categoryService.deleteCategory(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

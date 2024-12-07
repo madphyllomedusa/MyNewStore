@@ -3,6 +3,7 @@ package etu.nic.store.config;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,8 +31,8 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers("/auth/**").permitAll()
-                        .antMatchers("/category/**").permitAll()
-                        .antMatchers("/product/**").permitAll()
+                        .antMatchers(HttpMethod.GET,"/category/**").permitAll()
+                        .antMatchers(HttpMethod.GET,"/product/**").permitAll()
                         .antMatchers("/cart/**").permitAll()
                         .anyRequest().authenticated()
                 )

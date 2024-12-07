@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/cart")
@@ -31,8 +32,8 @@ public class CartController {
 
     @PostMapping("/item")
     public ResponseEntity<Void> addProductToCart(
-            @RequestParam Long productId,
-            @RequestParam Integer quantity,
+            @RequestParam @Valid Long productId,
+            @RequestParam @Valid Integer quantity,
             HttpServletRequest request) {
         Long userId = userService.extractUserIdFromContext();
         String sessionId = request.getSession().getId();
@@ -42,7 +43,7 @@ public class CartController {
 
     @DeleteMapping("/{productId}")
     public ResponseEntity<Void> removeProductFromCart(
-            @PathVariable Long productId,
+            @PathVariable @Valid Long productId,
             HttpServletRequest request) {
         Long userId = userService.extractUserIdFromContext();
         String sessionId = request.getSession().getId();

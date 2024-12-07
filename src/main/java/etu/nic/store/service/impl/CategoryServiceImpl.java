@@ -47,6 +47,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public void deleteCategory(Long id) {
         logger.info("Trying to delete category with id {}", id);
         validateId(id);
@@ -67,6 +68,7 @@ public class CategoryServiceImpl implements CategoryService {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public List<Long> getCategoryAndSubcategoryIds(Long id) {
         logger.info("Fetching category and subcategories for category {}", id);
         validateId(id);
@@ -89,7 +91,7 @@ public class CategoryServiceImpl implements CategoryService {
     private void validateId(Long id) {
         if (id == null || id < 0) {
             logger.error("Invalid category id");
-            throw new BadRequestException("Неверный id");
+            throw new BadRequestException("Неверный id категории");
         }
     }
 
