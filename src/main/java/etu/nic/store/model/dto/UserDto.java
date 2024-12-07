@@ -30,8 +30,6 @@ public class UserDto {
     @NotNull
     private Role role;
 
-    private OffsetDateTime createdTime;
-
     private OffsetDateTime blockedTime;
 
     @Override

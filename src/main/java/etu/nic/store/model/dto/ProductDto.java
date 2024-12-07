@@ -1,5 +1,6 @@
 package etu.nic.store.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -8,12 +9,12 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
-import java.time.OffsetDateTime;
 import java.util.Map;
 import java.util.Set;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProductDto {
     @PositiveOrZero(message = "id не может быть меньше нуля")
     private Long id;
@@ -41,7 +42,4 @@ public class ProductDto {
     @NotEmpty(message = "У продукта должны быть изображения")
     private Set<String> imageUrls;
 
-    private OffsetDateTime createdTime;
-    private OffsetDateTime updatedTime;
-    private OffsetDateTime deletedTime;
 }

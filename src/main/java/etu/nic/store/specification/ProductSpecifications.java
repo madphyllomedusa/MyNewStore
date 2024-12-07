@@ -1,4 +1,4 @@
-package etu.nic.store.repository.specification;
+package etu.nic.store.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import etu.nic.store.model.entity.Product;

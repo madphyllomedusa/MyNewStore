@@ -9,11 +9,9 @@ public interface ProductService {
 
     ProductDto updateProduct(Long id, ProductDto productDto);
 
-    ProductDto deleteProductById(Long id);
-
     ProductDto getProductById(Long id);
 
-    Page<ProductDto> getProductsByCategoryId(Long categoryId, Pageable pageable);
+    ProductDto deleteProductById(Long id);
 
     Page<ProductDto> getProductsByCategoryAndSubcategories(Long categoryId, String sortBy, Pageable pageable);
 }

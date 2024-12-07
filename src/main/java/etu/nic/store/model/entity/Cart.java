@@ -26,10 +26,10 @@ public class Cart {
     private Long id;
 
     @Column(name = "user_id", nullable = true)
-    private Long userId; // Связь с авторизованным пользователем
+    private Long userId;
 
     @Column(name = "session_id", nullable = true)
-    private String sessionId; // Для гостей
+    private String sessionId;
 
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Set<CartItem> items = new HashSet<>();

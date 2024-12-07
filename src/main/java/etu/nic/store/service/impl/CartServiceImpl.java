@@ -1,5 +1,6 @@
 package etu.nic.store.service.impl;
 
+import etu.nic.store.exceptionhandler.NotFoundException;
 import etu.nic.store.model.dto.CartDto;
 import etu.nic.store.model.entity.Cart;
 import etu.nic.store.model.entity.CartItem;
@@ -15,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.HashSet;
 
 @Service
 @RequiredArgsConstructor
@@ -72,11 +75,17 @@ public class CartServiceImpl implements CartService {
         logger.info("Removing product {} from cart for session {}", productId, sessionId);
 
         Cart cart = findOrCreateCart(userId, sessionId);
-        cart.getItems().removeIf(item -> item.getProduct().getId().equals(productId));
+        CartItem item = findCartItem(cart, productId);
+        if (item == null) {
+            logger.error("Product {} not fond in cart {}", productId, cart.getId());
+            throw new NotFoundException("Продукт " + productId + " не найден в корзине");
+        }
+        cart.getItems().remove(item);
 
         logger.info("Product {} removed from cart {}", productId, cart);
         cartRepository.save(cart);
     }
+
 
     private Cart findOrCreateCart(Long userId, String sessionId) {
         if (userId == null || userId == 0L) {
@@ -85,6 +94,8 @@ public class CartServiceImpl implements CartService {
                         logger.info("Creating new cart for session {}", sessionId);
                         Cart cart = new Cart();
                         cart.setSessionId(sessionId);
+                        cart.setItems(new HashSet<>());
+                        logger.info("Cart for unauthorized user created");
                         return cartRepository.save(cart);
                     });
         }
@@ -95,6 +106,8 @@ public class CartServiceImpl implements CartService {
                     Cart cart = new Cart();
                     cart.setUserId(userId);
                     cart.setSessionId(sessionId);
+                    cart.setItems(new HashSet<>());
+                    logger.info("Cart for authorized user created");
                     return cartRepository.save(cart);
                 });
     }
@@ -113,4 +126,5 @@ public class CartServiceImpl implements CartService {
         }
         return userId;
     }
+
 }

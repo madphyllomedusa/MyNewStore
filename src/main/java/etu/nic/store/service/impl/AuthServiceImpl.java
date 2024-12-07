@@ -17,6 +17,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
@@ -34,17 +36,19 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userRepository.findByEmail(email)
                 .orElseThrow(()-> new NotFoundException("Пользователь не найден"));
+
         if (user == null) {
             logger.error("User with email {} not found", email);
             throw new BadRequestException("Неверный адрес электронной почты");
         }
+        String storedPassword = new String(user.getPassword(), StandardCharsets.UTF_8);
 
-        if (!passwordEncoder.matches(password, new String(user.getPassword()))) {
-            logger.error("Incorrect password");
+        if (!passwordEncoder.matches(password, storedPassword)) {
+            logger.error("Incorrect password for user {}", email);
             throw new BadRequestException("Неверный пароль");
         }
 
-        String token = jwtService.generateToken(user.getEmail(), user.getRole().toString());
+        String token = jwtService.generateToken(user.getEmail(), user.getRole());
         logger.info("User successfully logged in");
         return new JwtAuthenticationResponse(token);
     }
@@ -52,22 +56,23 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public JwtAuthenticationResponse register(SignUpRequest signUpRequest) {
         logger.info("Attempting to register user");
-
+        isEmailNotUnique(signUpRequest.getEmail());
         boolean isPasswordSame = signUpRequest.getPassword().equals(signUpRequest.getConfirmPassword());
 
         if (!isPasswordSame) {
             logger.error("Passwords do not match");
             throw new BadRequestException("Пароли не совпадают");
         }
-        isEmailNotUnique(signUpRequest.getEmail());
 
         String hashedPassword = passwordEncoder.encode(signUpRequest.getPassword());
-        signUpRequest.setPassword(hashedPassword);
+        byte[] hashedPasswordBytes = hashedPassword.getBytes(StandardCharsets.UTF_8);
 
         User user = userMapper.fromSignUpRequest(signUpRequest);
+        user.setPassword(hashedPasswordBytes);
         user.setRole(Role.ROLE_USER);
+
         User savedUser = userRepository.save(user);
-        String token = jwtService.generateToken(savedUser.getEmail(), savedUser.getRole().toString());
+        String token = jwtService.generateToken(savedUser.getEmail(), savedUser.getRole());
         logger.info("User successfully registered at {}", savedUser.getCreatedTime());
         return new JwtAuthenticationResponse(token);
     }

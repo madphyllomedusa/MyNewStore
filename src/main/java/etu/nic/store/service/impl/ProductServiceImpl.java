@@ -6,14 +6,16 @@ import etu.nic.store.model.dto.ProductDto;
 import etu.nic.store.model.entity.Product;
 import etu.nic.store.model.mapper.ProductMapper;
 import etu.nic.store.repository.ProductRepository;
-import etu.nic.store.repository.specification.ProductSpecifications;
+import etu.nic.store.specification.ProductSpecifications;
 import etu.nic.store.service.CategoryService;
 import etu.nic.store.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,28 +73,22 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDto(product);
     }
 
-    @Override
-    public Page<ProductDto> getProductsByCategoryId(Long categoryId, Pageable pageable) {
-        logger.info("Fetching products by category id {}", categoryId);
-        if (categoryId == null || categoryId < 1) {
-            logger.error("Invalid category id {}", categoryId);
-            throw new BadRequestException("Неверный идентификатор категории");
-        }
-        Page<Product> products = productRepository.findByCategories_Id(categoryId, pageable);
-        return products.map(productMapper::toDto);
-    }
 
     @Override
     public Page<ProductDto> getProductsByCategoryAndSubcategories(Long categoryId, String sortBy, Pageable pageable) {
         logger.info("Fetching products for category {} and its subcategories with sort {}", categoryId, sortBy);
-
+        if(categoryId == null || categoryId < 1) {
+            logger.error("Invalid category id {}", categoryId);
+            throw new BadRequestException("Неверный id категории");
+        }
         List<Long> categoryIds = categoryService.getCategoryAndSubcategoryIds(categoryId);
 
-        Specification<Product> specification = Specification
-                .where(ProductSpecifications.belongsToCategories(categoryIds))
-                .and(ProductSpecifications.sortByPrice(sortBy));
+        Specification<Product> specification = ProductSpecifications.belongsToCategories(categoryIds);
 
-        Page<Product> products = productRepository.findAll(specification, pageable);
+        Sort sort = Sort.by(sortBy.equals("priceAsc") ? Sort.Direction.ASC : Sort.Direction.DESC, "price");
+        PageRequest pageRequest = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+
+        Page<Product> products = productRepository.findAll(specification, pageRequest);
 
         return products.map(productMapper::toDto);
     }

@@ -37,6 +37,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Transactional
     public CategoryDto updateCategory(Long id, CategoryDto categoryDto) {
         logger.info("Trying to update category with id {}", id);
+        validateId(id);
         validateCategory(categoryDto);
         Category category = findCategoryById(id);
         categoryMapper.updateEntity(categoryDto, category);
@@ -48,6 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public void deleteCategory(Long id) {
         logger.info("Trying to delete category with id {}", id);
+        validateId(id);
         Category category = findCategoryById(id);
         category.setDeletedTime(OffsetDateTime.now());
         categoryRepository.save(category);
@@ -57,6 +59,7 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public List<CategoryDto> getCategoryChildren(Long id) {
         logger.info("Trying to get category children with id {}", id);
+        validateId(id);
         Category category = findCategoryById(id);
         List<Category> childCategories = categoryRepository.findByParent_Id(category.getId());
         return childCategories.stream()
@@ -66,6 +69,7 @@ public class CategoryServiceImpl implements CategoryService {
 
     public List<Long> getCategoryAndSubcategoryIds(Long id) {
         logger.info("Fetching category and subcategories for category {}", id);
+        validateId(id);
         return categoryRepository.findAllSubcategories(id).stream()
                 .map(Category::getId)
                 .collect(Collectors.toList());
@@ -79,6 +83,13 @@ public class CategoryServiceImpl implements CategoryService {
         if (categoryDto.getName() == null || categoryDto.getName().isEmpty()) {
             logger.error("Category name is null or empty");
             throw new BadRequestException("Имя категории не заполнено");
+        }
+    }
+
+    private void validateId(Long id) {
+        if (id == null || id < 0) {
+            logger.error("Invalid category id");
+            throw new BadRequestException("Неверный id");
         }
     }
 

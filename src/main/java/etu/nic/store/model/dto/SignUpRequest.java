@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Data
 @AllArgsConstructor
@@ -21,7 +22,7 @@ public class SignUpRequest {
     @NotBlank(message = "Фамилия пользователя не должно быть пустым")
     private String lastName;
 
-    @NotBlank(message = "Пароль не должен быть пустым")
+    @NotNull(message = "Пароль не должен быть пустым")
     private String password;
 
     @NotBlank(message = "Подтверждение пароля не должно быть пустым")

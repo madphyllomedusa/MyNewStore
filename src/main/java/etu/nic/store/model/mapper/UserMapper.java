@@ -3,6 +3,7 @@ package etu.nic.store.model.mapper;
 import etu.nic.store.model.dto.SignUpRequest;
 import etu.nic.store.model.dto.UserDto;
 import etu.nic.store.model.entity.User;
+import etu.nic.store.model.enums.Role;
 import org.springframework.stereotype.Component;
 
 import java.time.OffsetDateTime;
@@ -16,12 +17,12 @@ public class UserMapper {
         userDto.setLastName(user.getLastName());
         userDto.setEmail(user.getEmail().toLowerCase());
         userDto.setRole(user.getRole());
-        userDto.setCreatedTime(user.getCreatedTime());
-        userDto.setCreatedTime(user.getBlockedTime());
         return userDto;
     }
 
     public User fromSignUpRequest(SignUpRequest signUpRequest) {
+        if (signUpRequest == null) return null;
+
         User user = new User();
         user.setFirstName(signUpRequest.getFirstName());
         user.setLastName(signUpRequest.getLastName());
@@ -39,7 +40,6 @@ public class UserMapper {
         user.setLastName(userDto.getLastName());
         user.setEmail(userDto.getEmail().toLowerCase());
         user.setRole(userDto.getRole());
-        user.setCreatedTime(userDto.getCreatedTime());
         user.setBlockedTime(userDto.getBlockedTime());
         return user;
     }

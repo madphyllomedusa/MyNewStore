@@ -1,5 +1,6 @@
 package etu.nic.store.config;
 
+import etu.nic.store.model.enums.Role;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,7 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private Duration expiration;
 
-    public String generateToken(String email, String role) {
+    public String generateToken(String email, Role role) {
         return Jwts.builder()
                 .setSubject(email)
                 .claim("role", role)

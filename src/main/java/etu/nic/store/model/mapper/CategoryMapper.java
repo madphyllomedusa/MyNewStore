@@ -25,9 +25,7 @@ public class CategoryMapper {
             category.setParent(parentCategory);
         }
         category.setDescription(categoryDto.getDescription());
-        category.setCreatedTime(categoryDto.getCreatedTime());
-        category.setUpdatedTime(categoryDto.getUpdatedTime());
-        category.setDeletedTime(categoryDto.getDeletedTime());
+
     }
 
     public CategoryDto toDto(Category category) {
@@ -37,9 +35,6 @@ public class CategoryMapper {
         categoryDto.setParentId(category.getParent() != null ?
                 category.getParent().getId() : null);
         categoryDto.setDescription(category.getDescription());
-        categoryDto.setCreatedTime(category.getCreatedTime());
-        categoryDto.setUpdatedTime(category.getUpdatedTime());
-        categoryDto.setDeletedTime(category.getDeletedTime());
         return categoryDto;
     }
 }

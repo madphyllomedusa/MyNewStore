@@ -31,9 +31,6 @@ public class ProductMapper {
         productDto.setPrice(product.getPrice());
         productDto.setQuantity(product.getQuantity());
         productDto.setQuantityStatus(product.getQuantityStatus());
-        productDto.setCreatedTime(product.getCreatedTime());
-        productDto.setUpdatedTime(product.getUpdatedTime());
-        productDto.setDeletedTime(product.getDeletedTime());
 
         if (product.getCategories() != null) {
             Set<Long> categoryIds = product.getCategories().stream()

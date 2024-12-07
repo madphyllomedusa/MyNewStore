@@ -32,6 +32,7 @@ public class SecurityConfig {
                         .antMatchers("/auth/**").permitAll()
                         .antMatchers("/category/**").permitAll()
                         .antMatchers("/product/**").permitAll()
+                        .antMatchers("/cart/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex
