@@ -73,6 +73,11 @@ public class ProductServiceImpl implements ProductService {
         return productMapper.toDto(product);
     }
 
+    @Override
+    public Product getProductEntityById(Long productId) {
+        return productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("Продукт с id " + productId + " не найден"));
+    }
 
     @Override
     public Page<ProductDto> getProductsByCategoryAndSubcategories(Long categoryId, String sortBy, Pageable pageable) {

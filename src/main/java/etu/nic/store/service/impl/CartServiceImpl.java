@@ -6,7 +6,6 @@ import etu.nic.store.model.entity.Cart;
 import etu.nic.store.model.entity.CartItem;
 import etu.nic.store.model.entity.Product;
 import etu.nic.store.model.mapper.CartMapper;
-import etu.nic.store.model.mapper.ProductMapper;
 import etu.nic.store.repository.CartRepository;
 import etu.nic.store.service.CartService;
 import etu.nic.store.service.ProductService;
@@ -27,7 +26,6 @@ public class CartServiceImpl implements CartService {
     private final CartRepository cartRepository;
     private final CartMapper cartMapper;
     private final ProductService productService;
-    private final ProductMapper productMapper;
     private final UserService userService;
 
     @Override
@@ -48,7 +46,7 @@ public class CartServiceImpl implements CartService {
         userId = resolveUserId(userId);
 
         Cart cart = findOrCreateCart(userId, sessionId);
-        Product product = productMapper.toEntity(productService.getProductById(productId));
+        Product product = productService.getProductEntityById(productId);
 
         logger.info("Trying to add product {} to user {} with session {}", productId, userId, sessionId);
 

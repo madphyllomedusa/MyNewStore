@@ -42,7 +42,6 @@ public class SecurityConfig {
                                 "/swagger-ui-config.yaml",
                                 "/openapi.yaml"
                         ).permitAll()
-
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

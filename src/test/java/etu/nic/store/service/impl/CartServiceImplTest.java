@@ -2,12 +2,10 @@ package etu.nic.store.service.impl;
 
 import etu.nic.store.exceptionhandler.NotFoundException;
 import etu.nic.store.model.dto.CartDto;
-import etu.nic.store.model.dto.ProductDto;
 import etu.nic.store.model.entity.Cart;
 import etu.nic.store.model.entity.CartItem;
 import etu.nic.store.model.entity.Product;
 import etu.nic.store.model.mapper.CartMapper;
-import etu.nic.store.model.mapper.ProductMapper;
 import etu.nic.store.repository.CartRepository;
 import etu.nic.store.service.ProductService;
 import etu.nic.store.service.UserService;
@@ -41,9 +39,6 @@ class CartServiceImplTest {
 
     @Mock
     private ProductService productService;
-
-    @Mock
-    private ProductMapper productMapper;
 
     @Mock
     private UserService userService;
@@ -99,9 +94,6 @@ class CartServiceImplTest {
     @ParameterizedTest
     @MethodSource("provideDataForAddProductToCart")
     void testAddProductToCart(Long userId, String sessionId, Long productId, Integer quantity, boolean existingItem) {
-        product.setId(productId);
-        product.setName("Test Product");
-
         if (existingItem) {
             CartItem cartItem = new CartItem();
             cartItem.setProduct(product);
@@ -109,17 +101,14 @@ class CartServiceImplTest {
             cart.getItems().add(cartItem);
         }
 
-        ProductDto productDto = new ProductDto();
-        productDto.setId(productId);
-        productDto.setName("Test Product");
-
         when(cartRepository.findByUserIdOrSessionId(userId, sessionId)).thenReturn(Optional.of(cart));
-        when(productService.getProductById(productId)).thenReturn(productDto);
-        when(productMapper.toEntity(productDto)).thenReturn(product);
+
+        when(productService.getProductEntityById(productId)).thenReturn(product);
 
         cartService.addProductToCart(userId, sessionId, productId, quantity);
 
         assertTrue(cart.getItems().stream().anyMatch(item -> item.getProduct().getId().equals(productId)));
+
         verify(cartRepository).save(cart);
     }
 

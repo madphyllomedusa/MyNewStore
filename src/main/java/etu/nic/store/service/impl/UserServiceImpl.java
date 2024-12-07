@@ -1,7 +1,6 @@
 package etu.nic.store.service.impl;
 
 import etu.nic.store.exceptionhandler.NotFoundException;
-import etu.nic.store.model.entity.User;
 import etu.nic.store.repository.UserRepository;
 import etu.nic.store.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +21,19 @@ public class UserServiceImpl implements UserService {
         Object principal = SecurityContextHolder.getContext()
                 .getAuthentication()
                 .getPrincipal();
+
         if (!(principal instanceof String)) {
             logger.info("User not logged in");
             return null;
         }
 
         String email = (String) principal;
+
+        if ("anonymousUser".equalsIgnoreCase(email)) {
+            logger.info("Анонимный пользователь");
+            return null;
+        }
+
         return findUserIdByEmail(email);
     }
 
