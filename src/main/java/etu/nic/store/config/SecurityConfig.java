@@ -31,9 +31,18 @@ public class SecurityConfig {
                 )
                 .authorizeHttpRequests(auth -> auth
                         .antMatchers("/auth/**").permitAll()
-                        .antMatchers(HttpMethod.GET,"/category/**").permitAll()
-                        .antMatchers(HttpMethod.GET,"/product/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/category/**").permitAll()
+                        .antMatchers(HttpMethod.GET, "/product/**").permitAll()
                         .antMatchers("/cart/**").permitAll()
+                        .antMatchers(
+                                "/swagger-ui.html",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/api-docs/**",
+                                "/swagger-ui-config.yaml",
+                                "/openapi.yaml"
+                        ).permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(ex -> ex

@@ -23,7 +23,7 @@ public class CloudinaryConfig {
 
     @Bean
     public Cloudinary cloudinary() {
-        logger.info("Creating Cloudinary with: cloud_name={}, api_key={}, api_secret={}", cloudName,apiKey,apiSecret);
+        logger.info("Creating Cloudinary");
         return new Cloudinary(ObjectUtils.asMap(
                 "cloud_name", cloudName,
                 "api_key", apiKey,

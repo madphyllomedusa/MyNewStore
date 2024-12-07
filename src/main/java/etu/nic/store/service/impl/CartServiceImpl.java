@@ -121,7 +121,6 @@ public class CartServiceImpl implements CartService {
 
     private Long resolveUserId(Long userId) {
         if (userId == null) {
-            logger.info("Resolving userId from security context.");
             return userService.extractUserIdFromContext();
         }
         return userId;
