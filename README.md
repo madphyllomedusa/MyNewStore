@@ -59,8 +59,25 @@ http://localhost:8080/auth/login
 Http.Post     /product         Добавляет один продукт
               /product/bulk    Добавляет сразу несколько продуктов
 Http.Put      /product/{id}    Изменяет продукт по id
-Http.Delete   /product/{id}    Удаляет продукт(Реализованно мягкое удаление, при котором продукт не удаляется из бд, а поменчается флагом Deleted
+Http.Delete   /product/{id}    Удаляет продукт(Реализованно мягкое удалениe)
 ```
+```
+Http.Post     /category         Добавляет одну категорию
+              /category/bulk    Добавляет сразу несколько категорий
+Http.Put      /category/{id}    Изменяет категорию по id
+Http.Delete   /category/{id}    Удаляет продукт(Реализованно мягкое удалениe)
+```
+Также поддерживается доступ к загрузке изображений
+```
+http://localhost:8080/product/image
+```
+Необходимо будет загрузить файл в body form-data
+<img width="998" alt="image" src="https://github.com/user-attachments/assets/1fce3eb0-5e96-402e-a59c-1f273bcd25d0">
+А также добавить токен авторизации
+<img width="1009" alt="image" src="https://github.com/user-attachments/assets/408dcf06-9ceb-463b-84e1-e97c17dd9f9b">
+При попытке пользователя обратиться к закрытому методу будет выведена ошибка 403 Forbidden (Доступ запрещен).
+
+
 
 
 ### Остановка приложения:
