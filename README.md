@@ -55,6 +55,7 @@ http://localhost:8080/auth/login
 <img width="996" alt="image" src="https://github.com/user-attachments/assets/8c93b38e-84a8-48a7-b81a-deb7636be41f">
 
 ### Использование некоторых контроллеров ограничено ролью "ROLE_ADMIN" для того чтобы обычные пользователи не могли влиять на магазин изнутри.
+Для этого нужно передавать Authorization Bearer Token
 ```
 Http.Post     /product         Добавляет один продукт
               /product/bulk    Добавляет сразу несколько продуктов
@@ -105,7 +106,7 @@ docker-compose down
 
 ### API Документация
 
-#### Автоматически сгенеррированный swager.
+#### Автоматически сгенеррированный swagger.
 ```
 http://localhost:8080/swagger-ui/index.html
 ```
